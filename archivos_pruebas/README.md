@@ -4,18 +4,24 @@ Imágenes y un PDF locales para **pruebas manuales** y suites opt-in (golden / e
 
 ## Archivos
 
-`doc_01.webp` … `doc_12.jpeg` (extensión original de cada archivo).
+| Archivo | Tipo |
+|---------|------|
+| `doc_01.webp` … `doc_06.jpg` | Imágenes |
+| `doc_07.pdf` | PDF multipágina |
+| `doc_08.jpg` … `doc_12.jpeg` | Imágenes |
 
 ## Uso
 
 | Modo | Cómo |
 |------|------|
-| Manual (UI) | Arrancá `scripts/dev.ps1`, subí un `doc_NN` → Run → export |
-| Golden OCR | `cd backend` → `pytest -m slow -o addopts=` (usa `doc_01.webp`) |
-| Playwright e2e | Backend en `:8100` + `cd frontend && npm run test:e2e` (usa `doc_01.webp`) |
+| Manual (UI) | Arrancá `scripts/dev.ps1`, subí un `doc_NN` → Run (PDF auto-OCR) → export |
+| Golden OCR | `cd backend` → `pytest -m slow -o addopts=` (todas las imágenes + 1ª pág. del PDF) |
+| Playwright e2e | Backend `:8100` + `cd frontend && npm run test:e2e` (subset: `doc_01`, `05`, `08`, `12` + `doc_07.pdf`) |
+
+Soft asserts: ≥1 región, confAvg ≥ 0.3, texto no vacío (sin strings exactos).
 
 No reemplaza a [`tests/fixtures/images/`](../tests/fixtures/images/README.md) del checklist README (`poster.avif`, nubes, etc.).
 
 ## Qué no hace
 
-No entra en `pytest` / `npm test` por defecto. No hay asserts de texto exacto: los documentos pueden variar.
+No entra en `pytest` / `npm test` / CI por defecto. No hay asserts de texto exacto: los documentos pueden variar.

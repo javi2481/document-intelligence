@@ -74,7 +74,7 @@ pytest -m slow -o addopts=
 - API/storage: `/health`; `/upload` PNG, TIFF multipágina y PDF; rechazos (>20 MB, >50 págs. vía mock de conteo, formato basura); `/infer` con `_run_paddle` mockeado (rescue ON en imagen, OFF en PDF/TIFF); `/status`; `/export/.../annotated`; `_detect_format` y `_page_filename`.
 - Unitarios: `parsing`, helpers de `orientation`, `annotate`.
 
-**Cubre (slow):** soft golden sobre `doc_01.webp` (regiones ≥ 1, confAvg ≥ 0.3, texto no vacío).
+**Cubre (slow):** soft golden sobre todo el corpus imagen de `archivos_pruebas/` + primera página de `doc_07.pdf` (regiones ≥ 1, confAvg ≥ 0.3, texto no vacío).
 
 **No cubre:** e2e de UI (ver frontend Playwright). Fixtures checklist en [../tests/fixtures/images/](../tests/fixtures/images/README.md); corpus manual en [../archivos_pruebas/](../archivos_pruebas/README.md).
 
