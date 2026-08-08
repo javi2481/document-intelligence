@@ -12,9 +12,11 @@ SPA académica para **extraer texto de imágenes y documentos (PDF/TIFF)** y exp
 |------|-----|
 | [backend/](backend/README.md) | API FastAPI + PaddleOCR |
 | [backend/app/](backend/app/README.md) | Módulos: ocr, orientation, routes… |
+| [backend/tests/](backend/README.md#tests) | pytest API/storage (OCR mockeado) |
 | [frontend/](frontend/README.md) | UI React + Vite |
 | [frontend/src/](frontend/src/README.md) | Componentes y libs |
-| [tests/fixtures/images/](tests/fixtures/images/README.md) | Imágenes de prueba |
+| [tests/fixtures/images/](tests/fixtures/images/README.md) | Fixtures checklist / smoke |
+| [archivos_pruebas/](archivos_pruebas/README.md) | Corpus manual + golden/e2e opt-in |
 | [docs/](docs/README.md) | Producto y ejemplos |
 | [scripts/](scripts/) | Arranque dev |
 | [CHANGELOG.md](CHANGELOG.md) | Cambios recientes |
@@ -72,6 +74,33 @@ Variables: [`.env.example`](.env.example) (`VITE_API_URL`, cache PaddleX; opcion
 - Export JSON (`reading_order`, `page_index`), Markdown, CSV, TXT, PNG anotado.
 - Ejemplo JSON: [docs/examples/ocr-result.example.json](docs/examples/ocr-result.example.json).
 
+## Tests automatizados
+
+No reemplazan del todo el checklist e2e manual. Capas:
+
+```powershell
+# Rápidos (sin Paddle real)
+cd backend
+.\.venv\Scripts\Activate.ps1
+pip install -r requirements-dev.txt
+pytest
+
+cd ..\frontend
+npm test
+
+# Opt-in: golden OCR real (Paddle; usa archivos_pruebas/doc_01.webp)
+cd ..\backend
+pytest -m slow -o addopts=
+
+# Opt-in: Playwright (backend debe estar en :8100)
+cd ..\frontend
+npm run test:e2e
+```
+
+Corpus manual extra: [archivos_pruebas/](archivos_pruebas/README.md). Fixtures checklist: [tests/fixtures/images/](tests/fixtures/images/README.md).
+
+Detalle: [backend/README.md](backend/README.md#tests) y [frontend/README.md](frontend/README.md#tests).
+
 ## Checklist e2e manual
 
 Con backend y frontend arriba:
@@ -80,6 +109,7 @@ Con backend y frontend arriba:
 |------|-----------------|
 | `tests/fixtures/images/poster.avif` | **Run** → `TRY` ≈ −90°, `WERE` ≈ +90° |
 | `nube-manzana.png` / `nube-corazon.jpeg` | confAvg razonable; algunas `orientation ≠ 0` |
+| `archivos_pruebas/doc_01`…`doc_12` | Smoke libre (formatos mixtos + PDF); ver [archivos_pruebas/README.md](archivos_pruebas/README.md) |
 | PDF corto (2–3 págs.) | Galería `doc.pdf · p.k/n`; UI auto-OCR; API deja páginas `pending` tras `/upload` |
 | TIFF multipágina | Ídem (frames vía Pillow) |
 | PDF > 50 págs. | HTTP 400 |

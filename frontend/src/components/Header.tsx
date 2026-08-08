@@ -181,7 +181,14 @@ export function Header({
         </div>
         <div className="ml-auto flex flex-wrap items-center gap-2">
           <div className="flex gap-1" role="group" aria-label="Acciones de sesión">
-            <button type="button" disabled={busy || !selected} onClick={onRunSelected} className="rounded-md px-2.5 py-1 text-xs font-medium text-white disabled:opacity-40" style={{ background: "var(--accent)" }}>
+            <button
+              type="button"
+              data-testid="run-selected"
+              disabled={busy || !selected}
+              onClick={onRunSelected}
+              className="rounded-md px-2.5 py-1 text-xs font-medium text-white disabled:opacity-40"
+              style={{ background: "var(--accent)" }}
+            >
               {busy && progress.total === 1 ? "Running…" : "Run"}
             </button>
             <button type="button" disabled={busy || !images.some((i) => i.status === "pending" || i.status === "error")} onClick={onRunAll} className="rounded-md px-2.5 py-1 text-xs font-medium disabled:opacity-40" style={btnStyle}>

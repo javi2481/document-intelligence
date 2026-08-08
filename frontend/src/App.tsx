@@ -179,6 +179,7 @@ export default function App() {
         accept=".png,.jpg,.jpeg,.jfif,.bmp,.gif,.webp,.avif,.tif,.tiff,.ico,.ppm,.pnm,.pdf,image/*,application/pdf"
         multiple
         className="hidden"
+        data-testid="file-input"
         onChange={(event) => event.target.files && addFiles(event.target.files)}
       />
       <Header

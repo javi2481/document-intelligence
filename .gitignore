@@ -26,5 +26,7 @@ engram-export.json
 artifacts/*
 !artifacts/.gitkeep
 **/_e2e_*/
+frontend/test-results/
+frontend/playwright-report/
 backend/_probe*
 backend/_orient_*

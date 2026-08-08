@@ -51,6 +51,31 @@ PDF/TIFF no usan un segundo engine: se rasterizan y se OCR-ean como PNG.
 - `PADDLEOCR_API_TOKEN` — opcional, solo SDK cloud futuro (no leído por este API)
 - Uploads en `backend/uploads/` (store in-memory; se pierde al reiniciar)
 
+## Tests
+
+Suite pytest en [`tests/`](tests/) (app FastAPI de prueba **sin** lifespan / warmup Paddle).
+
+```powershell
+cd backend
+.\.venv\Scripts\Activate.ps1
+pip install -r requirements-dev.txt   # pytest, httpx (+ deps de requirements.txt)
+pytest                                # excluye @pytest.mark.slow (addopts)
+```
+
+Golden OCR real (Paddle; tarda; `archivos_pruebas/doc_01.webp`):
+
+```powershell
+pytest -m slow -o addopts=
+```
+
+**Cubre (rápido):**
+- API/storage: `/health`; `/upload` PNG, TIFF multipágina y PDF; rechazos (>20 MB, >50 págs. vía mock de conteo, formato basura); `/infer` con `_run_paddle` mockeado (rescue ON en imagen, OFF en PDF/TIFF); `/status`; `/export/.../annotated`; `_detect_format` y `_page_filename`.
+- Unitarios: `parsing`, helpers de `orientation`, `annotate`.
+
+**Cubre (slow):** soft golden sobre `doc_01.webp` (regiones ≥ 1, confAvg ≥ 0.3, texto no vacío).
+
+**No cubre:** e2e de UI (ver frontend Playwright). Fixtures checklist en [../tests/fixtures/images/](../tests/fixtures/images/README.md); corpus manual en [../archivos_pruebas/](../archivos_pruebas/README.md).
+
 ## Qué no hace
 
 StructureV3/VL/HPD, HPI, multi-motor, auth, DB, colas, Docker, Poppler/pdf2image.
@@ -59,3 +84,4 @@ StructureV3/VL/HPD, HPI, multi-motor, auth, DB, colas, Docker, Poppler/pdf2image
 
 - [app/README.md](app/README.md) — módulos internos
 - [../docs/PRODUCT.md](../docs/PRODUCT.md)
+- [../README.md](../README.md#tests-automatizados) — cómo correr backend + frontend

@@ -29,6 +29,32 @@ npm run dev
 npm run build
 ```
 
+## Tests
+
+### Vitest (rápido)
+
+```bash
+npm test
+npm run test:watch
+```
+
+Libs puras: `readingOrder`, `consolidate`, `documentGroups`, `buildExportResult` / `buildExportDocument`.
+
+### Playwright e2e (opt-in)
+
+Requiere API en `http://127.0.0.1:8100` (OCR real). El frontend lo arranca Playwright.
+
+```bash
+npm install
+npx playwright install chromium
+# en otra terminal: backend uvicorn :8100
+npm run test:e2e
+```
+
+Smoke: sube `archivos_pruebas/doc_01.webp` → **Run** → espera regiones en «Palabras detectadas».
+
+**No cubre (Vitest):** DOM/`downloadBlob`. **E2e** no corre en `npm test`.
+
 ## Qué no hace
 
 No ejecuta OCR en el browser; no selecciona tier/mode (motor fixed medium en API).
@@ -36,4 +62,6 @@ No ejecuta OCR en el browser; no selecciona tier/mode (motor fixed medium en API
 ## Archivos relacionados
 
 - [src/README.md](src/README.md)
+- [src/lib/README.md](src/lib/README.md)
 - [../docs/PRODUCT.md](../docs/PRODUCT.md)
+- [../README.md](../README.md#tests-automatizados)

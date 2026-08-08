@@ -2,7 +2,9 @@
 
 ## Qué hace
 
-Imágenes versionadas para smoke manual: OCR + orientación + export.
+Imágenes versionadas para **smoke manual** (y futuros goldens OCR): OCR real + orientación + export en UI/API.
+
+**No las usa** la suite pytest de [`backend/tests/`](../../../backend/tests/): esos tests generan PNG/TIFF/PDF en memoria y mockean Paddle. Ver [backend/README.md — Tests](../../../backend/README.md#tests) y [README raíz — Tests automatizados](../../../README.md#tests-automatizados).
 
 ## Entrada / salida
 

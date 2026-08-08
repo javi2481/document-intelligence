@@ -1,4 +1,4 @@
-import type { ExportFormat } from "./exportResult";
+import type { ExportFormat, BuiltExport } from "./exportResult";
 import { downloadBlob } from "./exportResult";
 import type { ConsolidatedDocument } from "./consolidate";
 
@@ -7,10 +7,11 @@ export type ExportDocumentOptions = {
   consolidated: ConsolidatedDocument;
 };
 
-export function exportDocument(
+/** Serializa un documento consolidado a JSON/MD/CSV/TXT (sin DOM). */
+export function buildExportDocument(
   format: ExportFormat,
   { filename, consolidated }: ExportDocumentOptions,
-) {
+): BuiltExport {
   const base = filename.replace(/\.[^.]+$/, "") || "document";
   const { cleanText, pages, metrics } = consolidated;
 
@@ -36,8 +37,11 @@ export function exportDocument(
       })),
       cleanText,
     };
-    downloadBlob(`${base}.json`, JSON.stringify(payload, null, 2), "application/json");
-    return;
+    return {
+      filename: `${base}.json`,
+      content: JSON.stringify(payload, null, 2),
+      mime: "application/json",
+    };
   }
 
   if (format === "md") {
@@ -57,8 +61,11 @@ export function exportDocument(
       cleanText || "_(sin texto)_",
       "",
     ];
-    downloadBlob(`${base}.md`, lines.join("\n"), "text/markdown");
-    return;
+    return {
+      filename: `${base}.md`,
+      content: lines.join("\n"),
+      mime: "text/markdown",
+    };
   }
 
   if (format === "csv") {
@@ -90,9 +97,21 @@ export function exportDocument(
         ]),
       ),
     ];
-    downloadBlob(`${base}.csv`, rows.map((row) => row.join(",")).join("\n"), "text/csv");
-    return;
+    return {
+      filename: `${base}.csv`,
+      content: rows.map((row) => row.join(",")).join("\n"),
+      mime: "text/csv",
+    };
   }
 
-  downloadBlob(`${base}.txt`, cleanText, "text/plain");
+  return {
+    filename: `${base}.txt`,
+    content: cleanText,
+    mime: "text/plain",
+  };
+}
+
+export function exportDocument(format: ExportFormat, opts: ExportDocumentOptions) {
+  const built = buildExportDocument(format, opts);
+  downloadBlob(built.filename, built.content, built.mime);
 }

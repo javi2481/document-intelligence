@@ -2,11 +2,17 @@ import type { OCRResult, Region } from "../types/ocr";
 
 export type ExportFormat = "json" | "md" | "csv" | "txt";
 
-type ExportResultOptions = {
+export type ExportResultOptions = {
   result: OCRResult;
   filename: string;
   orderedRegions: Region[];
   cleanText: string;
+};
+
+export type BuiltExport = {
+  filename: string;
+  content: string;
+  mime: string;
 };
 
 export function downloadBlob(filename: string, content: string, mime: string) {
@@ -21,10 +27,11 @@ export function downloadBlob(filename: string, content: string, mime: string) {
   setTimeout(() => URL.revokeObjectURL(url), 0);
 }
 
-export function exportResult(
+/** Serializa un OCRResult a JSON/MD/CSV/TXT (sin DOM). */
+export function buildExportResult(
   format: ExportFormat,
   { result, filename, orderedRegions, cleanText }: ExportResultOptions,
-) {
+): BuiltExport {
   const base = filename.replace(/\.[^.]+$/, "") || "ocr";
   const orderIndex = new Map(orderedRegions.map((r, i) => [r.id, i]));
   const polyStr = (r: Region) => (r.poly ?? []).map((p) => `${p[0]},${p[1]}`).join(";");
@@ -39,8 +46,11 @@ export function exportResult(
         reading_order: orderIndex.get(r.id) ?? r.id,
       })),
     };
-    downloadBlob(`${base}.json`, JSON.stringify(payload, null, 2), "application/json");
-    return;
+    return {
+      filename: `${base}.json`,
+      content: JSON.stringify(payload, null, 2),
+      mime: "application/json",
+    };
   }
 
   if (format === "md") {
@@ -77,8 +87,11 @@ export function exportResult(
       }),
       "",
     ];
-    downloadBlob(`${base}.md`, lines.join("\n"), "text/markdown");
-    return;
+    return {
+      filename: `${base}.md`,
+      content: lines.join("\n"),
+      mime: "text/markdown",
+    };
   }
 
   if (format === "csv") {
@@ -108,9 +121,21 @@ export function exportResult(
         `"${polyStr(r)}"`,
       ]),
     ];
-    downloadBlob(`${base}.csv`, rows.map((row) => row.join(",")).join("\n"), "text/csv");
-    return;
+    return {
+      filename: `${base}.csv`,
+      content: rows.map((row) => row.join(",")).join("\n"),
+      mime: "text/csv",
+    };
   }
 
-  downloadBlob(`${base}.txt`, orderedRegions.map((r) => r.text).join("\n"), "text/plain");
+  return {
+    filename: `${base}.txt`,
+    content: orderedRegions.map((r) => r.text).join("\n"),
+    mime: "text/plain",
+  };
+}
+
+export function exportResult(format: ExportFormat, opts: ExportResultOptions) {
+  const built = buildExportResult(format, opts);
+  downloadBlob(built.filename, built.content, built.mime);
 }
