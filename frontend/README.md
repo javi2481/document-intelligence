@@ -51,7 +51,7 @@ npx playwright install chromium
 npm run test:e2e
 ```
 
-Smoke: subset de `archivos_pruebas/` (`doc_01`, `doc_05`, `doc_08`, `doc_12` → Run; `doc_07.pdf` → auto-OCR) → espera regiones en «Palabras detectadas».
+Smoke: **todos** los archivos de `archivos_pruebas/` (imágenes → Run; PDF → auto-OCR) → espera regiones en «Palabras detectadas». La lista se lee del disco al correr el test.
 
 **No cubre (Vitest):** DOM/`downloadBlob`. **E2e** no corre en `npm test`.
 

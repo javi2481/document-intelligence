@@ -16,7 +16,7 @@ Imágenes y un PDF locales para **pruebas manuales** y suites opt-in (golden / e
 |------|------|
 | Manual (UI) | Arrancá `scripts/dev.ps1`, subí un `doc_NN` → Run (PDF auto-OCR) → export |
 | Golden OCR | `cd backend` → `pytest -m slow -o addopts=` (todas las imágenes + 1ª pág. del PDF) |
-| Playwright e2e | Backend `:8100` + `cd frontend && npm run test:e2e` (subset: `doc_01`, `05`, `08`, `12` + `doc_07.pdf`) |
+| Playwright e2e | Backend `:8100` + `cd frontend && npm run test:e2e` (**todos** los `doc_*` de esta carpeta) |
 
 Soft asserts: ≥1 región, confAvg ≥ 0.3, texto no vacío (sin strings exactos).
 
