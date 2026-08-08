@@ -1,0 +1,10 @@
+# Dependencias mínimas para `pytest` rápido en CI (sin PaddleOCR).
+fastapi
+uvicorn
+python-multipart
+pillow
+pillow-avif-plugin
+pydantic
+pypdfium2
+pytest
+httpx

@@ -62,6 +62,8 @@ pip install -r requirements-dev.txt   # pytest, httpx (+ deps de requirements.tx
 pytest                                # excluye @pytest.mark.slow (addopts)
 ```
 
+CI (GitHub Actions) usa [`requirements-ci.txt`](requirements-ci.txt) sin Paddle y corre el mismo `pytest` rápido + `npm test` / build. Ver [`.github/workflows/tests.yml`](../.github/workflows/tests.yml).
+
 Golden OCR real (Paddle; tarda; `archivos_pruebas/doc_01.webp`):
 
 ```powershell

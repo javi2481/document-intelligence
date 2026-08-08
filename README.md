@@ -97,6 +97,8 @@ cd ..\frontend
 npm run test:e2e
 ```
 
+CI en push/PR: `.github/workflows/tests.yml` (`pytest` rápido sin Paddle + `npm test` + build).
+
 Corpus manual extra: [archivos_pruebas/](archivos_pruebas/README.md). Fixtures checklist: [tests/fixtures/images/](tests/fixtures/images/README.md).
 
 Detalle: [backend/README.md](backend/README.md#tests) y [frontend/README.md](frontend/README.md#tests).
